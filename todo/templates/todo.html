@@ -1,0 +1,117 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>TODO</title>
+  <link rel="stylesheet" href="{% static 'css/style.css' %}">
+  <style>
+    body {
+      background-color: #f87d7d;
+      font-family: Arial, sans-serif;
+      padding: 20px;
+      margin: 0;
+    }
+
+    .container {
+      max-width: 600px;
+      margin: 0 auto;
+      background-color: #fff;
+      padding: 20px;
+      border-radius: 8px;
+    }
+
+    .header {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    .task-form {
+      margin-bottom: 30px;
+    }
+
+    .task-form input[type="text"] {
+      width: 100%;
+      padding: 10px;
+      margin-top: 10px;
+      margin-bottom: 10px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+
+    .task-form button {
+      width: 100%;
+      padding: 10px;
+      background-color: #007bff;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+    .task-form button:hover {
+      background-color: #0056b3;
+    }
+
+    .task {
+      border: 1px solid #ddd;
+      padding: 12px;
+      border-radius: 6px;
+      margin-bottom: 10px;
+      background-color: #f9f9f9;
+    }
+
+    .task-actions a {
+      margin-right: 10px;
+      text-decoration: none;
+      color: #007bff;
+    }
+
+    .task-actions a:hover {
+      text-decoration: underline;
+    }
+
+    .footer {
+      text-align: center;
+      margin-top: 30px;
+    }
+
+  </style>
+</head>
+<body>
+
+  <div class="container">
+
+    <div class="header">
+      <h2>Hello, {{ user.username }}</h2>
+      <p>Total Tasks: {{ total }} | Completed: {{ completed }}</p>
+      
+    </div>
+
+    <form method="POST" class="task-form">
+      {% csrf_token %}
+      <label>Add New Task:</label>
+      <input type="text" name="task" placeholder="Enter task..." required>
+      <button type="submit">Add Task</button>
+    </form>
+
+    {% for todo in todos %}
+      <div class="task">
+        <strong>{{ todo.title }}</strong><br>
+        <span>Status: {{ todo.completed|yesno:"✅ Done,❌ Pending" }}</span><br>
+        <div class="task-actions">
+          <a href="/complete/{{ todo.id }}">[Toggle Done]</a>
+          <a href="/edit/{{ todo.id }}">[Edit]</a>
+          <a href="/delete/{{ todo.id }}">[Delete]</a>
+        </div>
+      </div>
+    {% empty %}
+      <p>No tasks yet.</p>
+    {% endfor %}
+
+
+    <a href="/logout">Logout</a>
+  </div>
+
+</body>
+</html>
